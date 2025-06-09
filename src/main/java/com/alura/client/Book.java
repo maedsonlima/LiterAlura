@@ -1,42 +1,66 @@
 package com.alura.client;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonAlias;
 import java.util.List;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Book {
-    private String title;
-    private List<Author> authors;
-    private List<String> languages;
-    private int download_count;
 
-    public String getTitle() {
-        return title;
+    @JsonAlias("title")
+    private String titulo;
+
+    @JsonAlias("authors")
+    private List<Author> autores;
+
+    @JsonAlias("languages")
+    private List<String> idiomas;
+
+    @JsonAlias("download_count")
+    private int numeroDownloads;
+
+    // Getters e Setters
+    public String getTitulo() {
+        return titulo;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
     }
 
-    public List<Author> getAuthors() {
-        return authors;
+    public List<Author> getAutores() {
+        return autores;
     }
 
-    public void setAuthors(List<Author> authors) {
-        this.authors = authors;
+    public void setAutores(List<Author> autores) {
+        this.autores = autores;
     }
 
-    public List<String> getLanguages() {
-        return languages;
+    public List<String> getIdiomas() {
+        return idiomas;
     }
 
-    public void setLanguages(List<String> languages) {
-        this.languages = languages;
+    public void setIdiomas(List<String> idiomas) {
+        this.idiomas = idiomas;
     }
 
-    public int getDownload_count() {
-        return download_count;
+    public int getNumeroDownloads() {
+        return numeroDownloads;
     }
 
-    public void setDownload_count(int download_count) {
-        this.download_count = download_count;
+    public void setNumeroDownloads(int numeroDownloads) {
+        this.numeroDownloads = numeroDownloads;
+    }
+
+    @Override
+    public String toString() {
+        return """
+                ------LIVRO---------
+                Titulo: %s
+                Autor(es): %s
+                Idioma(s): %s
+                Número de Downloads: %d
+                --------------------
+                """.formatted(titulo, autores, idiomas, numeroDownloads);
     }
 }

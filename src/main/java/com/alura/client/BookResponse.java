@@ -1,11 +1,12 @@
 package com.alura.client;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.List;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class BookResponse {
     private int count;
     private List<Book> results;
-
-    // Getters e Setters
 
     public int getCount() {
         return count;
@@ -22,4 +23,6 @@ public class BookResponse {
     public void setResults(List<Book> results) {
         this.results = results;
     }
+
+
 }
