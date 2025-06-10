@@ -20,18 +20,3 @@ Este projeto é uma aplicação Java com Spring Boot que consome dados da API p�
 - API externa (Gutendex)
 - Maven
 
-## Como Executar
-
-### Pré-requisitos
-
-- Java 17+
-- PostgreSQL em execução
-- Maven instalado
-
-### Passos
-
-1. Clone o repositório:
-
-```bash
-git clone https://github.com/seu-usuario/seu-repositorio.git
-cd seu-repositorio
