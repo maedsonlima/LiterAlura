@@ -11,7 +11,15 @@ import java.util.Scanner;
 public class Application implements CommandLineRunner {
 
     private final Scanner scanner = new Scanner(System.in);
-    private final GutendexClient client = new GutendexClient();
+    private final GutendexClient client;
+    private final ConversorDeDados conversor;
+    private final LivroService livroService;
+
+    public Application(GutendexClient client, ConversorDeDados conversor, LivroService livroService) {
+        this.client = client;
+        this.conversor = conversor;
+        this.livroService = livroService;
+    }
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
@@ -48,7 +56,7 @@ public class Application implements CommandLineRunner {
         System.out.println("2 - Listar livros registrados");
         System.out.println("3 - Listar autores registrados");
         System.out.println("4 - Listar autores vivos em um determinado ano");
-        System.out.println("5 - Listar livros em um determinado idioma");
+        System.out.println("5 - Listar livros por idioma");
         System.out.println("0 - Sair");
         System.out.print("Sua escolha: ");
     }
@@ -62,13 +70,13 @@ public class Application implements CommandLineRunner {
         if (livros.isEmpty()) {
             System.out.println("Nenhum livro encontrado com esse título.");
         } else {
-            livros.forEach(System.out::println);
+            Book primeiroLivro = livros.get(0); // pega o primeiro da lista
+            BookDTO dto = conversor.converter(primeiroLivro); // converte o primeiro
+            livroService.salvarLivro(dto); // salva no banco
+            System.out.println("Livro salvo com sucesso: " + dto);
         }
-
-        // Aqui futuramente: salvar no banco (JPA)
     }
 
-    // Métodos a implementar nas próximas etapas:
     private void listarLivrosRegistrados() {
         System.out.println("[2] Listar livros registrados - em breve");
     }

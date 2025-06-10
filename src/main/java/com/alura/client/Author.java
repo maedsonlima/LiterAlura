@@ -40,6 +40,11 @@ public class Author {
         this.anoFalecimento = anoFalecimento;
     }
 
+    // Corrigido: método getName()
+    public String getName() {
+        return nome;
+    }
+
     @Override
     public String toString() {
         return "Autor: " + nome +
