@@ -14,11 +14,13 @@ public class Application implements CommandLineRunner {
     private final GutendexClient client;
     private final ConversorDeDados conversor;
     private final LivroService livroService;
+    private final AuthorService authorService;
 
-    public Application(GutendexClient client, ConversorDeDados conversor, LivroService livroService) {
+    public Application(GutendexClient client, ConversorDeDados conversor, LivroService livroService, AuthorService authorService) {
         this.client = client;
         this.conversor = conversor;
         this.livroService = livroService;
+        this.authorService = authorService;
     }
 
     public static void main(String[] args) {
@@ -70,26 +72,57 @@ public class Application implements CommandLineRunner {
         if (livros.isEmpty()) {
             System.out.println("Nenhum livro encontrado com esse título.");
         } else {
-            Book primeiroLivro = livros.get(0); // pega o primeiro da lista
-            BookDTO dto = conversor.converter(primeiroLivro); // converte o primeiro
-            livroService.salvarLivro(dto); // salva no banco
+            Book primeiroLivro = livros.get(0);
+            BookDTO dto = conversor.converter(primeiroLivro);
+            livroService.salvarLivro(dto);
             System.out.println("Livro salvo com sucesso: " + dto);
         }
     }
 
     private void listarLivrosRegistrados() {
-        System.out.println("[2] Listar livros registrados - em breve");
+        List<LivroEntity> livros = livroService.listarTodos();
+        if (livros.isEmpty()) {
+            System.out.println("Nenhum livro encontrado no banco.");
+        } else {
+            livros.forEach(l -> System.out.printf("Título: %s | Idioma: %s | Downloads: %d | Autor: %s%n",
+                    l.getTitulo(), l.getIdioma(), l.getNumeroDownloads(), l.getAutor().getNome()));
+        }
     }
 
     private void listarAutoresRegistrados() {
-        System.out.println("[3] Listar autores registrados - em breve");
+        List<AuthorEntity> autores = authorService.listarTodos();
+        if (autores.isEmpty()) {
+            System.out.println("Nenhum autor encontrado no banco.");
+        } else {
+            autores.forEach(a -> System.out.printf("Nome: %s | Nascimento: %d | Falecimento: %s%n",
+                    a.getNome(), a.getAnoNascimento(),
+                    a.getAnoFalecimento() != null ? a.getAnoFalecimento() : "Ainda vivo"));
+        }
     }
 
     private void listarAutoresVivosNoAno() {
-        System.out.println("[4] Listar autores vivos em um determinado ano - em breve");
+        System.out.print("Digite o ano: ");
+        int ano = Integer.parseInt(scanner.nextLine());
+
+        List<AuthorEntity> autores = authorService.listarVivosEm(ano);
+        if (autores.isEmpty()) {
+            System.out.println("Nenhum autor vivo encontrado para esse ano.");
+        } else {
+            autores.forEach(a -> System.out.printf("Nome: %s | Nascimento: %d%n",
+                    a.getNome(), a.getAnoNascimento()));
+        }
     }
 
     private void listarLivrosPorIdioma() {
-        System.out.println("[5] Listar livros por idioma - em breve");
+        System.out.print("Digite o idioma (ex: 'pt' ou 'en'): ");
+        String idioma = scanner.nextLine();
+
+        List<LivroEntity> livros = livroService.buscarPorIdioma(idioma);
+        if (livros.isEmpty()) {
+            System.out.println("Nenhum livro encontrado nesse idioma.");
+        } else {
+            livros.forEach(l -> System.out.printf("Título: %s | Downloads: %d | Autor: %s%n",
+                    l.getTitulo(), l.getNumeroDownloads(), l.getAutor().getNome()));
+        }
     }
 }

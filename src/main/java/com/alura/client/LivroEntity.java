@@ -1,16 +1,35 @@
 package com.alura.client;
 
-public class BookDTO {
+import jakarta.persistence.*;
+
+@Entity
+public class LivroEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private String titulo;
-    private String autor;
+
     private String idioma;
+
     private Integer numeroDownloads;
 
-    public BookDTO(String titulo, String autor, String idioma, Integer numeroDownloads) {
+    @ManyToOne
+    @JoinColumn(name = "autor_id")
+    private AuthorEntity autor;
+
+    public LivroEntity() {}
+
+    public LivroEntity(String titulo, String idioma, Integer numeroDownloads, AuthorEntity autor) {
         this.titulo = titulo;
-        this.autor = autor;
         this.idioma = idioma;
         this.numeroDownloads = numeroDownloads;
+        this.autor = autor;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getTitulo() {
@@ -19,14 +38,6 @@ public class BookDTO {
 
     public void setTitulo(String titulo) {
         this.titulo = titulo;
-    }
-
-    public String getAutor() {
-        return autor;
-    }
-
-    public void setAutor(String autor) {
-        this.autor = autor;
     }
 
     public String getIdioma() {
@@ -45,13 +56,11 @@ public class BookDTO {
         this.numeroDownloads = numeroDownloads;
     }
 
-    @Override
-    public String toString() {
-        return "BookDTO{" +
-                "titulo='" + titulo + '\'' +
-                ", autor='" + autor + '\'' +
-                ", idioma='" + idioma + '\'' +
-                ", numeroDownloads=" + numeroDownloads +
-                '}';
+    public AuthorEntity getAutor() {
+        return autor;
+    }
+
+    public void setAutor(AuthorEntity autor) {
+        this.autor = autor;
     }
 }
